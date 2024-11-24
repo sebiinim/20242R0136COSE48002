@@ -13,7 +13,15 @@ import re
 from parse import parse_data, selfC
 from main import llm, train_df, test_df
 
-def krconnectivityEV(input_sentence, upper_objective, krEV_memory_tests, guideline_con, example_con, isguide, isexample):
+def krconnectivityEV(input_sentence, upper_objective, guideline_con, example_con, isguide, isexample):
+  keyResult_memory = ConversationBufferMemory()
+
+  # 1. 메모리의 system_message에 Task Description 추가
+  keyResult_memory.save_context(
+    inputs={"human": krEV_task_description},
+    outputs={"AI": "해결할 과제를 학습했습니다."},
+  )
+  
   if isguide:
     prefix_guideline = '- 주어진 가이드라인을 평가에 이용하세요'
     guideline_con = guideline_con
@@ -48,7 +56,7 @@ def krconnectivityEV(input_sentence, upper_objective, krEV_memory_tests, guideli
 
   chain_connectivity = ConversationChain(
     llm=llm,
-    memory=krEV_memory_tests,
+    memory=keyResult_memory,
   )
 
   krEV_connectivity = chain_connectivity.run(final_prompt)
@@ -56,9 +64,19 @@ def krconnectivityEV(input_sentence, upper_objective, krEV_memory_tests, guideli
   res = parse_data(krEV_connectivity)
   return res
 
+# res = krconnectivityEV("인사를 잘 한다", "칭찬을 받는다", "con 가이드라인", krEV_connectivity_examples_1, True, True)
+# print(res)
+# print(type(res))
 
+def krmeasurabilityEV(input_sentence, upper_objective, guideline_mea, example_mea, isguide, isexample):
+  keyResult_memory = ConversationBufferMemory()
 
-def krmeasurabilityEV(input_sentence, upper_objective, krEV_memory_tests, guideline_mea, example_mea, isguide, isexample):
+  # 1. 메모리의 system_message에 Task Description 추가
+  keyResult_memory.save_context(
+    inputs={"human": krEV_task_description},
+    outputs={"AI": "해결할 과제를 학습했습니다."},
+  )
+  
   if isguide:
     prefix_guideline = '- 주어진 가이드라인을 평가에 이용하세요'
     guideline_mea = guideline_mea
@@ -93,7 +111,7 @@ def krmeasurabilityEV(input_sentence, upper_objective, krEV_memory_tests, guidel
 
   chain_measurability = ConversationChain(
     llm=llm,
-    memory=krEV_memory_tests,
+    memory=keyResult_memory,
   )
 
   krEV_measurability = chain_measurability.run(final_prompt)
@@ -101,8 +119,19 @@ def krmeasurabilityEV(input_sentence, upper_objective, krEV_memory_tests, guidel
   res = parse_data(krEV_measurability)
   return res
 
+# res = krmeasurabilityEV("인사를 잘 한다", "칭찬을 받는다", "mea 가이드라인", krEV_measurability_examples_2, True, True)
+# print(res)
+# print(type(res))
 
-def krdirectivityEV(input_sentence, upper_objective, krEV_memory_tests, guideline_dir, example_dir, isguide, isexample):
+def krdirectivityEV(input_sentence, upper_objective, guideline_dir, example_dir, isguide, isexample):
+  keyResult_memory = ConversationBufferMemory()
+
+  # 1. 메모리의 system_message에 Task Description 추가
+  keyResult_memory.save_context(
+    inputs={"human": krEV_task_description},
+    outputs={"AI": "해결할 과제를 학습했습니다."},
+  )
+  
   if isguide:
     prefix_guideline = '- 주어진 가이드라인을 평가에 이용하세요'
     guideline_dir = guideline_dir
@@ -137,7 +166,7 @@ def krdirectivityEV(input_sentence, upper_objective, krEV_memory_tests, guidelin
 
   chain_directivity = ConversationChain(
     llm=llm,
-    memory=krEV_memory_tests,
+    memory=keyResult_memory,
   )
 
   krEV_directivity = chain_directivity.run(final_prompt)
@@ -145,54 +174,11 @@ def krdirectivityEV(input_sentence, upper_objective, krEV_memory_tests, guidelin
   res = parse_data(krEV_directivity)
   return res
 
-
-def krEVsaveResult(df_data, index, result_keyResult):
-    # predict_connectivity_description
-    try:
-        df_data.loc[index, 'predict_connectivity_description'] = str(result_keyResult.get('predict_connectivity_description', 'N/A'))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_connectivity_description'] = 'N/A'
-        print(f"Error saving 'predict_connectivity_description' for index {index}: {e}")
-
-    # predict_connectivity_score
-    try:
-        df_data.loc[index, 'predict_connectivity_score'] = float(result_keyResult.get('predict_connectivity_score', 0.0))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_connectivity_score'] = 0.0
-        print(f"Error saving 'predict_connectivity_score' for index {index}: {e}")
-
-    # predict_measurability_description
-    try:
-        df_data.loc[index, 'predict_measurability_description'] = str(result_keyResult.get('predict_measurability_description', 'N/A'))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_measurability_description'] = 'N/A'
-        print(f"Error saving 'predict_measurability_description' for index {index}: {e}")
-
-    # predict_measurability_score
-    try:
-        df_data.loc[index, 'predict_measurability_score'] = float(result_keyResult.get('predict_measurability_score', 0.0))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_measurability_score'] = 0.0
-        print(f"Error saving 'predict_measurability_score' for index {index}: {e}")
-
-    # predict_directivity_description
-    try:
-        df_data.loc[index, 'predict_directivity_description'] = str(result_keyResult.get('predict_directivity_description', 'N/A'))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_directivity_description'] = 'N/A'
-        print(f"Error saving 'predict_directivity_description' for index {index}: {e}")
-
-    # predict_directivity_score
-    try:
-        df_data.loc[index, 'predict_directivity_score'] = float(result_keyResult.get('predict_directivity_score', 0.0))
-    except (KeyError, ValueError, TypeError) as e:
-        df_data.loc[index, 'predict_directivity_score'] = 0.0
-        print(f"Error saving 'predict_directivity_score' for index {index}: {e}")
-
-
+res = krdirectivityEV("인사를 잘 한다", "칭찬을 받는다", "dir 가이드라인", krEV_directivity_examples_1, True, True)
+print(res)
+print(type(res))
 
 # kr 평가, 기존 가이드라인 이용
-
 def krEV(df_data, index, isguide, isexample):
   # 메모리 생성
   keyResult_memory = ConversationBufferMemory()
@@ -255,33 +241,12 @@ def krEV(df_data, index, isguide, isexample):
   krEV_measurability = krmeasurabilityEV(input_sentence, upper_objective, krEV_memory_measurability, guideline_mea, krEV_measurability_examples, isguide, isexample)
   krEV_directivity = krdirectivityEV(input_sentence, upper_objective, krEV_memory_directivity, guideline_dir, krEV_directivity_examples, isguide, isexample)
 
-  # print(krEV_connectivity)
-  # print(krEV_measurability)
-  # print(krEV_directivity)
-  # 결과 저장, 문자열 메소드 이용
-  krEVsaveResult(df_data, index, krEV_connectivity | krEV_measurability | krEV_directivity)
+  return krEV_connectivity | krEV_measurability | krEV_directivity
 
-  #결과 출력
-  # print("<kr evaluation>")
-  # print(f"predict_connectivity_description: {df_data.loc[index, 'predict_connectivity_description']}")
-  # print(f"predict_connectivity_score: {df_data.loc[index, 'predict_connectivity_score']}")
-  # print(f"predict_measurability_description: {df_data.loc[index, 'predict_measurability_description']}")
-  # print(f"predict_measurability_score: {df_data.loc[index, 'predict_measurability_score']}")
-  # print(f"predict_directivity_description: {df_data.loc[index, 'predict_directivity_description']}")
-  # print(f"predict_directivity_score: {df_data.loc[index, 'predict_directivity_score']}")
-  # print('\n')
-  
-  return f"""
-  score : {df_data.loc[index, 'predict_connectivity_score']},
-  description : {df_data.loc[index, 'predict_connectivity_description']},
-  score : {df_data.loc[index, 'predict_measurability_score']}
-  description : {df_data.loc[index, 'predict_measurability_description']}
-  score : {df_data.loc[index, 'predict_directivity_score']}
-  description : {df_data.loc[index, 'predict_directivity_description']}
-  """
+
 
 # kr 평가, 기존 가이드라인 이용
-def krEV_selfC(df_data, index, isguide, isexample):
+# def krEV_selfC(df_data, index, isguide, isexample):
   # 메모리 생성
   keyResult_memory = ConversationBufferMemory()
 
@@ -354,7 +319,3 @@ def krEV_selfC(df_data, index, isguide, isexample):
   print(f"predict_directivity_description: {df_data.loc[index, 'predict_directivity_description']}")
   print(f"predict_directivity_score: {df_data.loc[index, 'predict_directivity_score']}")
   print('\n')
-  
-  
-# res = krEV(test_df, 56, False, False)
-# print(res)
