@@ -1,20 +1,10 @@
 import subprocess
 import sys
 
-from langchain.prompts import PromptTemplate
-from langchain.prompts import FewShotPromptTemplate
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
-import copy
-import json
-import time
-import re
-
 from llm_gpt import gpt
 from llm_gemini import gemini
 
 import pandas as pd
-import openpyxl
 from sklearn.model_selection import train_test_split
 
 # requirements.txt 설치 함수
