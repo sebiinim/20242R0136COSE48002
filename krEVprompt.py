@@ -38,8 +38,8 @@ krEV_suffix = """
 
 <출력>
 "description":
-"score":x
-지금까지 받
+"score":
+
 출력 형식은 key가 description와 score 2개인 json형식입니다. json이라는 문구나 백틱 같은 특수문자는 사용하지 마십시오.
 """
 # krEV 프롬프트들
