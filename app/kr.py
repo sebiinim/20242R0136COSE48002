@@ -26,6 +26,7 @@ from langchain.memory import ConversationBufferMemory
 
 from llm_select import llm
 from parse import EV_parse_data, RV_parse_data
+from selfC import whowins
 
 
 # 기존 3개 함수를 하나로 합치고 type 파라미터로 구분하는 함수입니다.
@@ -116,7 +117,36 @@ def krEV(
 #     True,
 #     0,
 # )
-# print(res1)
+
+# res2 = krEV(
+#     "밥을 먹는다",
+#     "건강해진다",
+#     "출력 양식을 잘 지키십시오",
+#     krEV_connectivity_examples,
+#     True,
+#     True,
+#     0,
+# )
+
+# res3 = krEV(
+#     "밥을 먹는다",
+#     "건강해진다",
+#     "출력 양식을 잘 지키십시오",
+#     krEV_connectivity_examples,
+#     True,
+#     True,
+#     0,
+# )
+
+# res = whowins(
+#     res1["score"],
+#     res2["score"],
+#     res3["score"],
+#     res1["description"],
+#     res2["description"],
+#     res3["description"],
+# )
+# print(res)
 
 
 def krRV(
