@@ -5,7 +5,20 @@ import re
 
 from main import llm
 
-def parse_data(json_string):
+EV_error = """
+{
+    "description" : "None",
+    "score" : 0
+}"""
+
+RV_error = """
+{
+    "descritpion" : "None",
+    "revision" : "None"
+}"""
+
+
+def parse_data(json_string, EVRVtype):
     # print("입력 JSON 문자열:\n", json_string)
     try:
         data = json.loads(json_string)
@@ -26,12 +39,16 @@ def parse_data(json_string):
         # 다시 파싱 시도
         try:
             data = json.loads(res2)
-            #print("수정 성공\n")
+            # print("수정 성공\n")
             return data
         except json.JSONDecodeError:
-            print("LLM이 수정한 JSON도 유효하지 않습니다.\n")
-            print(res2)
-            return None
+            # print("LLM이 수정한 JSON도 유효하지 않습니다.\n")
+            # print(res2)
+            if EVRVtype == 0:  # EV
+                return EV_error
+            else:
+                return RV_error  # RV
+
 
 # input: score, des 세트 3개
 # output: 과반수 score, 병합된 des
@@ -52,20 +69,25 @@ def whowins(score1, score2, score3, des1, des2, des3):
     if len(unique_scores) == 1:
         # 모든 값이 같을 경우
         win_score = score1
-        win_des = llm.invoke("세 문장을 조합해서 재구성해줘: " + ", ".join(score_des_dict[win_score])).content
+        win_des = llm.invoke(
+            "세 문장을 조합해서 재구성해줘: " + ", ".join(score_des_dict[win_score])
+        ).content
     elif len(unique_scores) == 2:
         # 두 값이 같고 하나만 다른 경우
         for score in unique_scores:
             if scores.count(score) == 2:
                 win_score = score
-                win_des = llm.invoke("두 문장을 조합해서 재구성해줘: " + ", ".join(score_des_dict[win_score])).content
+                win_des = llm.invoke(
+                    "두 문장을 조합해서 재구성해줘: "
+                    + ", ".join(score_des_dict[win_score])
+                ).content
                 break
     else:
         # 셋 다 다른 경우, 중간값을 반환
         win_score = sorted(scores)[1]
         win_des = score_des_dict[win_score][0]
 
-    json_string = "win_score: " + str(win_score) + ',\n' + "win_des: " + win_des +',\n'
+    json_string = "win_score: " + str(win_score) + ",\n" + "win_des: " + win_des + ",\n"
 
     res = parse_data(json_string)
     iterator = iter(res.items())
@@ -74,38 +96,59 @@ def whowins(score1, score2, score3, des1, des2, des3):
     win_score = value1
     win_des = value2
     return win_score, win_des
-  
 
-def selfC(EVRVfunc, input_sentence, upper_objective, memory, guideline, example1, example2, example3, isguide, isexample, criteria):
-  print("\nselfC")
-  res1 = EVRVfunc(input_sentence, upper_objective, memory, guideline, example1, isguide, isexample)
-  iterator = iter(res1.items())
-  key1, value1 = iterator.__next__()
-  key2, value2 = iterator.__next__()
-  des_1, score_1 = value1, value2
-  print(f"des_1: {des_1}")
-  print(f"score_1: {score_1}")
-  time.sleep(3)
 
-  res2 = EVRVfunc(input_sentence, upper_objective, memory, guideline, example2, isguide, isexample)
-  iterator = iter(res2.items())
-  key1, value1 = iterator.__next__()
-  key2, value2 = iterator.__next__()
-  des_2, score_2 = value1, value2
-  print(f"des_2: {des_2}")
-  print(f"score_2: {score_2}")
-  time.sleep(3)
+def selfC(
+    EVRVfunc,
+    input_sentence,
+    upper_objective,
+    memory,
+    guideline,
+    example1,
+    example2,
+    example3,
+    isguide,
+    isexample,
+    criteria,
+):
+    print("\nselfC")
+    res1 = EVRVfunc(
+        input_sentence, upper_objective, memory, guideline, example1, isguide, isexample
+    )
+    iterator = iter(res1.items())
+    key1, value1 = iterator.__next__()
+    key2, value2 = iterator.__next__()
+    des_1, score_1 = value1, value2
+    print(f"des_1: {des_1}")
+    print(f"score_1: {score_1}")
+    time.sleep(3)
 
-  res3 = EVRVfunc(input_sentence, upper_objective, memory, guideline, example3, isguide, isexample)
-  iterator = iter(res3.items())
-  key1, value1 = iterator.__next__()
-  key2, value2 = iterator.__next__()
-  des_3, score_3 = value1, value2
-  print(f"des_3: {des_3}")
-  print(f"score_3: {score_3}")
-  time.sleep(3)
+    res2 = EVRVfunc(
+        input_sentence, upper_objective, memory, guideline, example2, isguide, isexample
+    )
+    iterator = iter(res2.items())
+    key1, value1 = iterator.__next__()
+    key2, value2 = iterator.__next__()
+    des_2, score_2 = value1, value2
+    print(f"des_2: {des_2}")
+    print(f"score_2: {score_2}")
+    time.sleep(3)
 
-  winscore, windes = whowins(score_1, score_2, score_3, des_1, des_2, des_3)
-  res = {f"predict_{criteria}_description": windes, f"predict_{criteria}_score": winscore}
-  time.sleep(3)
-  return res
+    res3 = EVRVfunc(
+        input_sentence, upper_objective, memory, guideline, example3, isguide, isexample
+    )
+    iterator = iter(res3.items())
+    key1, value1 = iterator.__next__()
+    key2, value2 = iterator.__next__()
+    des_3, score_3 = value1, value2
+    print(f"des_3: {des_3}")
+    print(f"score_3: {score_3}")
+    time.sleep(3)
+
+    winscore, windes = whowins(score_1, score_2, score_3, des_1, des_2, des_3)
+    res = {
+        f"predict_{criteria}_description": windes,
+        f"predict_{criteria}_score": winscore,
+    }
+    time.sleep(3)
+    return res

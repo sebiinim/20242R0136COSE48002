@@ -19,7 +19,7 @@ from langchain.prompts import FewShotPromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-from parse import parse_data
+from parser.parse import parse_data
 from main import llm
 
 
