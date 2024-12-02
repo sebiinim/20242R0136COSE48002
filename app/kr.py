@@ -1,4 +1,4 @@
-from krEVprompt import (
+from kr_module.krEVprompt import (
     krEV_task_description,
     krEV_example_prompt,
     krEV_suffix,
@@ -19,8 +19,8 @@ from langchain.prompts import FewShotPromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-from parser.parse import parse_data
-from main import llm
+from llm_module.llm_select import llm
+from parser_module.parse import parse_data
 
 
 # 기존 3개 함수를 하나로 합치고 type 파라미터로 구분하는 함수입니다.
