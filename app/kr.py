@@ -1,4 +1,9 @@
-from kr_module.krEVprompt import (
+import warnings
+
+warnings.filterwarnings("ignore")
+
+
+from krEVprompt import (
     krEV_task_description,
     krEV_example_prompt,
     krEV_suffix,
@@ -19,8 +24,8 @@ from langchain.prompts import FewShotPromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-from llm_module.llm_select import llm
-from parser_module.parse import parse_data
+from llm_select import llm
+from parse import EV_parse_data, RV_parse_data
 
 
 # 기존 3개 함수를 하나로 합치고 type 파라미터로 구분하는 함수입니다.
@@ -87,8 +92,8 @@ def krEV(
     else:
         final_prompt = prefix + suffix
 
-    print(type(final_prompt))
-    print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
+    # print(type(final_prompt))
+    # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
     krEV_chain = ConversationChain(
         llm=llm,
@@ -97,20 +102,21 @@ def krEV(
 
     krEV_res = krEV_chain.run(final_prompt)
 
-    krEV_res = parse_data(krEV_res)
+    # print(krEV_res)
+    krEV_res = EV_parse_data(krEV_res)
     return krEV_res
 
 
-res1 = krEV(
-    "밥을 먹는다",
-    "건강해진다",
-    "출력 양식을 잘 지키십시오",
-    krEV_connectivity_examples,
-    True,
-    True,
-    0,
-)
-print(res1)
+# res1 = krEV(
+#     "밥을 먹는다",
+#     "건강해진다",
+#     "출력 양식을 잘 지키십시오",
+#     krEV_connectivity_examples,
+#     True,
+#     True,
+#     0,
+# )
+# print(res1)
 
 
 def krRV(
@@ -164,25 +170,35 @@ def krRV(
     else:
         final_prompt = prefix + suffix
 
-    print(type(final_prompt))
-    print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
+    # print(type(final_prompt))
+    # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
     krRV_chain = ConversationChain(llm=llm)
 
     krRV_res = krRV_chain.run(final_prompt)
+    # print(krRV_res)
 
-    krRV_res = parse_data(krRV_res)
+    krRV_res = RV_parse_data(krRV_res)
     return krRV_res
 
 
-# res2 = krRV(
-#     "밥을 먹는다",
-#     "배불러진다",
-#     "밥을 먹으면 어떤 상태가 될까요?",
-#     krRV_examples,
-#     "밥을 먹는 것은 배부른 것과 관련성이 큽니다",
+# erstr = """
+#     "description" : "밥을 잘 먹는다"
+#     "score" :
+
+# """
+# err2 = "descritpino"
+# tres = EV_parse_data(erstr)
+# print(tres)
+
+# res2 = krEV(
+#     "LVUP를 켜고 게임을 한다.",
+#     "LVUP 오거나이저 기능 활용의 다변화 시도",
+#     "오거나이저 기능을 활용해보는 상황이 나온다",
+#     krEV_connectivity_examples,
 #     True,
 #     True,
+#     0,
 # )
 
 # print(res2)

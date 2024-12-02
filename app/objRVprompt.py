@@ -46,26 +46,26 @@ objRV_example_prompt = PromptTemplate(
         "revision",
     ],
     template="""
-  <입력>
+  <예시 입력>
   "guideline" : {guideline}
   "input_sentence": {input_sentence}
   "upper_objective": {upper_objective}
   "EV_description": {EV_description}
   
-  <출력>
+  <예시 출력>
   "revision" : {revision}
   "description" : {description}
   """,
 )
 
 objRV_suffix = """
-<입력>
+<실제 입력>
 "guideline": {guideline}
 "input_sentence": {input_sentence}
 "upper_objective": {upper_objective}
 "EV_description": {EV_description}
 
-<출력>
+<실제 출력>
 "description":
 "revision":
 

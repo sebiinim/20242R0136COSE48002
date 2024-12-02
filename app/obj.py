@@ -19,8 +19,8 @@ from langchain.prompts import FewShotPromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-from parser.parse import parse_data
-from main import llm
+from parse import EV_parse_data, RV_parse_data
+from llm_select import llm
 
 
 # 기존 3개 함수를 하나로 합치고 objtype 파라미터로 구분하는 함수입니다.
@@ -81,8 +81,8 @@ def objEV(
     else:
         final_prompt = prefix + suffix
 
-    print(type(final_prompt))
-    print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
+    # print(type(final_prompt))
+    # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
     objEV_chain = ConversationChain(
         llm=llm,
@@ -91,12 +91,12 @@ def objEV(
 
     objEV_res = objEV_chain.run(final_prompt)
 
-    objEV_res = parse_data(objEV_res)
+    objEV_res = EV_parse_data(objEV_res)
     return objEV_res
 
 
 # res1 = objEV(
-#     "밥을 먹는다",
+#     "매일 운동하고 고기를 먹는다.",
 #     "건강해진다",
 #     "출력 양식을 잘 지키십시오",
 #     objEV_align_examples,
@@ -158,23 +158,24 @@ def objRV(
     else:
         final_prompt = prefix + suffix
 
-    print(type(final_prompt))
-    print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
+    # print(type(final_prompt))
+    # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
     objRV_chain = ConversationChain(llm=llm)
 
     objRV_res = objRV_chain.run(final_prompt)
+    print(objRV_res)
 
-    objRV_res = parse_data(objRV_res)
+    objRV_res = RV_parse_data(objRV_res)
     return objRV_res
 
 
 res2 = objRV(
-    "밥을 먹는다",
-    "배불러진다",
-    "밥을 먹으면 어떤 상태가 될까요?",
+    "백화점에 간다.",
+    "친구 생일을 준비한다.",
+    "백화점에는 선물이 많이 있습니다.",
     objRV_examples,
-    "밥을 먹는 것은 배부른 것과 관련성이 큽니다",
+    "생일에는 보통 선물을 사 주므로 연관성이 있습니다. ",
     True,
     True,
 )

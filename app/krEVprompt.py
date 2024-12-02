@@ -31,12 +31,12 @@ krEV_example_prompt = PromptTemplate(
 )
 
 krEV_suffix = """
-<입력>
+<실제 입력>
 "guideline": {guideline}
 "input_sentence": {input_sentence}
 "upper_objective": {upper_objective}
 
-<출력>
+<실제 출력>
 "description":
 "score":
 
@@ -46,7 +46,7 @@ krEV_suffix = """
 
 # 평가요소의 의미 설명
 krEV_connectivity_description = """
-당신은 OKR(Objectives and Key Results) 평가 전문가입4니다. 주어진 Key Result(input_sentence)가 Objective(upper_objective)와 얼마나 연관성이 있는지 평가해야 합니다. 다음 평가 기준에 따라 단계적으로 사고하세요:
+당신은 OKR(Objectives and Key Results) 평가 전문가입니다. 주어진 Key Result(input_sentence)가 Objective(upper_objective)와 얼마나 연관성이 있는지 평가해야 합니다. 다음 평가 기준에 따라 단계적으로 사고하세요:
 
 1. 점수별 기준 검토
   1점 기준 =
