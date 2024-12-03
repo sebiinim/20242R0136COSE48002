@@ -136,17 +136,17 @@ def krEV_selfC(
     return whowins(description1, description2, description3, score1, score2, score3)
 
 
-res = krEV_selfC(
-    "밥을 먹는다",
-    "건강해진다",
-    "출력 양식을 잘 지키십시오",
-    krEV_connectivity_examples,
-    True,
-    True,
-    0,
-)
+# res = krEV_selfC(
+#     "밥을 먹는다",
+#     "건강해진다",
+#     "출력 양식을 잘 지키십시오",
+#     krEV_connectivity_examples,
+#     True,
+#     True,
+#     0,
+# )
 
-print(res)
+# print(res)
 
 # res1 = krEV(
 #     "밥을 먹는다",

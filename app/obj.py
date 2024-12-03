@@ -94,16 +94,16 @@ def objEV(
     return objEV_res
 
 
-res2 = objEV(
-    "식량을 많이 준비한다.",
-    "살아남는다.",
-    "출력 양식을 잘 지키십시오",
-    objEV_align_examples,
-    True,
-    True,
-    0,
-)
-print(res2)
+# res2 = objEV(
+#     "식량을 많이 준비한다.",
+#     "살아남는다.",
+#     "출력 양식을 잘 지키십시오",
+#     objEV_align_examples,
+#     True,
+#     True,
+#     0,
+# )
+# print(res2)
 
 
 def objEV_selfC(
