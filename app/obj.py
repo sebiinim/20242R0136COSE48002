@@ -52,38 +52,36 @@ def objEV(
     else:
         prefix_example = " "
     if objtype == 0:  # align
-        prefix = objEV_align_description.format(
+        obj_prefix = objEV_align_description.format(
             prefix_guideline=prefix_guideline, prefix_example=prefix_example
         )
     elif objtype == 1:  # value
-        prefix = objEV_value_description.format(
+        obj_prefix = objEV_value_description.format(
             prefix_guideline=prefix_guideline, prefix_example=prefix_example
         )
     else:  # error
         print("objtype parameter를 다시 확인하십시오. 0,1 중 하나여야 합니다.")
 
     # suffix(평가 문장 등 정보 담음)
-    suffix = objEV_suffix.format(
+    obj_suffix = objEV_suffix.format(
+        guideline=guideline,
         input_sentence=input_sentence,
         upper_objective=upper_objective,
-        guideline=guideline,
     )
 
     if isexample:
         objEV_fewshot_prompt = FewShotPromptTemplate(
-            prefix=prefix + "\n\n",
+            prefix=obj_prefix + "\n\n",
             examples=example,
             example_prompt=objEV_example_prompt,
-            suffix=suffix,
+            suffix=obj_suffix,
         )
-        final_prompt = objEV_fewshot_prompt.format(
-            input_sentence=input_sentence, upper_objective=upper_objective
-        )
+        final_prompt = objEV_fewshot_prompt.format()
     else:
-        final_prompt = prefix + suffix
+        final_prompt = obj_prefix + obj_suffix
 
-    # print(type(final_prompt))
-    # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
+    print(type(final_prompt))
+    print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
     objEV_chain = ConversationChain(
         llm=llm,
@@ -91,43 +89,12 @@ def objEV(
     )
 
     objEV_res = objEV_chain.run(final_prompt)
-    print(objEV_res)
 
     objEV_res = EV_parse_data(objEV_res)
     return objEV_res
 
 
-def objEV_selfC(
-    input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
-):
-    res1 = objEV(
-        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
-    )
-    print("res1", res1)
-    description1 = res1["description"]
-    score1 = res1["score"]
-    print("res1", description1, score1)
-
-    res2 = objEV(
-        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
-    )
-    print("res2", res2)
-    description2 = res2["description"]
-    score2 = res2["score"]
-    print("res2", description2, score2)
-
-    res3 = objEV(
-        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
-    )
-    print("res3", res3)
-    description3 = res3["description"]
-    score3 = res3["score"]
-    print("res3", description3, score3)
-
-    return whowins(description1, description2, description3, score1, score2, score3)
-
-
-res1 = objEV_selfC(
+res2 = objEV(
     "식량을 많이 준비한다.",
     "살아남는다.",
     "출력 양식을 잘 지키십시오",
@@ -136,7 +103,46 @@ res1 = objEV_selfC(
     True,
     0,
 )
-print(res1)
+print(res2)
+
+
+def objEV_selfC(
+    input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+):
+    res1 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+
+    description1 = res1["description"]
+    score1 = res1["score"]
+
+    res2 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+
+    description2 = res2["description"]
+    score2 = res2["score"]
+
+    res3 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+
+    description3 = res3["description"]
+    score3 = res3["score"]
+
+    return whowins(description1, description2, description3, score1, score2, score3)
+
+
+# res1 = objEV_selfC(
+#     "식량을 많이 준비한다.",
+#     "살아남는다.",
+#     "출력 양식을 잘 지키십시오",
+#     objEV_align_examples,
+#     True,
+#     True,
+#     0,
+# )
+# print(res1)
 
 
 def objRV(

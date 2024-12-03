@@ -38,17 +38,17 @@ objEV_example_prompt = PromptTemplate(
         "score",
     ],
     template="""
-    <예시 입력>
-    "guideline": {guideline}
-    "input_sentence": {input_sentence}
-    "upper_objective": {upper_objective}
-    
-    <예시 출력>
-    {
-    "description": {description}
-    "score": {score}
-    }
-  """,
+<예시 입력>
+"guideline": {guideline}
+"input_sentence": {input_sentence}
+"upper_objective": {upper_objective}
+
+<예시 출력>
+
+"description": {description}
+"score": {score}
+
+""",
 )
 
 objEV_suffix = """
@@ -58,10 +58,9 @@ objEV_suffix = """
 "upper_objective": {upper_objective}
 
 <실제 출력>
-{
-"description":
-"score":
-}
+"description": ,
+"score": 
+
 
 출력 형식은 key가 description와 score 2개인 json형식입니다. json이라는 문구나 백틱 같은 특수문자는 사용하지 마십시오.
 """

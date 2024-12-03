@@ -25,10 +25,10 @@ krEV_example_prompt = PromptTemplate(
   "upper_objective": {upper_objective}
   
   <예시 출력>
-  
+
   "description": "{description}",
   "score": {score}
-  
+
   """,
 )
 
@@ -40,8 +40,8 @@ krEV_suffix = """
 
 <실제 출력>
 
-    "description":
-    "score":
+"description":
+"score":
 
 
 출력 형식은 key가 description와 score 2개인 json형식입니다. json이라는 문구나 백틱 같은 특수문자는 사용하지 마십시오.
@@ -196,7 +196,6 @@ krEV_directivity_examples = [
         "score": "4",
     }
 ]
-
 
 krEV_connectivity_examples_1 = [
     {
