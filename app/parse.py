@@ -5,17 +5,9 @@ import re
 
 from llm_select import llm
 
-EV_error = """
-{
-    "description" : None,
-    "score" : None
-}"""
+EV_error = {"description": None, "score": None}
 
-RV_error = """
-{
-    "descritpion" : None,
-    "revision" : None
-}"""
+RV_error = {"descritpion": None, "revision": None}
 
 
 # 키와 값의 타입을 검증하는 함수
@@ -44,8 +36,7 @@ def EV_parse_data(raw_string):
     except json.JSONDecodeError:
         # LLM을 통해 올바른 JSON 형식으로 수정 요청
         #         1. 출력은 반드시 중괄호 {}로 시작하고 끝나야 합니다. 2. key는 description, score 2개이며 각 타입은 str, int 입니다. 3. 모든 키와 값은 큰따옴표(")로 감싸야 합니다. score의 value인 int는 제외합니다. 4. 출력 시 모든 특수문자를 제거하십시오. 5. JSON 포맷만 반환하십시오. (추가 설명 금지)
-        prompt = """ 다음 입력을 JSON 파싱이 가능한 형식으로 변환하십시오. 
-        """
+        prompt = """다음 입력을 JSON 파싱이 가능한 형식으로 변환하십시오. 모든 str type 키와 값은 큰따옴표(")로 감싸야 합니다. 특수문자를 제거하십시오."""
         res = llm.invoke(raw_string + prompt).content
 
         match = re.search(r"\{.*\}", res, re.DOTALL)
@@ -88,8 +79,8 @@ def RV_parse_data(raw_string):
     except json.JSONDecodeError:
         # LLM을 통해 올바른 JSON 형식으로 수정 요청
         #         1. 출력은 반드시 중괄호 {}로 시작하고 끝나야 합니다. 2. key는 description, revision 2개이며 각 타입은 str, int 입니다. 3. 모든 키와 값은 큰따옴표(")로 감싸야 합니다. score의 value인 int는 제외합니다. 4. 출력 시 모든 특수문자를 제거하십시오. 5. JSON 포맷만 반환하십시오. (추가 설명 금지)
-        prompt = """ 다음 입력을 JSON 파싱이 가능한 형식으로 변환하십시오. 
-        """
+        prompt = """다음 입력을 JSON 파싱이 가능한 형식으로 변환하십시오. 모든 str type 키와 값은 큰따옴표(")로 감싸야 합니다. 특수문자를 제거하십시오."""
+
         res = llm.invoke(raw_string + prompt).content
 
         match = re.search(r"\{.*\}", res, re.DOTALL)

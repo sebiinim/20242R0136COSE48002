@@ -57,8 +57,10 @@ krRV_example_prompt = PromptTemplate(
   "EV_description": {EV_description}
   
   <예시 출력>
+  {
   "revision" : {revision}
   "description" : {description}
+  }
   """,
 )
 
@@ -70,8 +72,10 @@ krRV_suffix = """
 "EV_description": {EV_description}
 
 <실제 출력>
+{
 "description":
 "revision":
+}
 
 출력 형식은 key가 description과 revision 2개인 json 형식입니다. json이라는 문구나 백틱 같은 특수문자는 사용하지 마십시오.
 """

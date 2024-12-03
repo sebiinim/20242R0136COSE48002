@@ -102,11 +102,51 @@ def krEV(
     )
 
     krEV_res = krEV_chain.run(final_prompt)
-
     # print(krEV_res)
+
     krEV_res = EV_parse_data(krEV_res)
     return krEV_res
 
+
+def krEV_selfC(
+    input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+):
+    res1 = krEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    print(res1)
+    description1 = res1["description"]
+    score1 = res1["score"]
+    print("res1", description1, score1)
+
+    res2 = krEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    description2 = res2["description"]
+    score2 = res2["score"]
+    print("res2", description2, score2)
+
+    res3 = krEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    description3 = res3["description"]
+    score3 = res3["score"]
+    print("res3", description3, score3)
+
+    return whowins(description1, description2, description3, score1, score2, score3)
+
+
+res = krEV_selfC(
+    "밥을 먹는다",
+    "건강해진다",
+    "출력 양식을 잘 지키십시오",
+    krEV_connectivity_examples,
+    True,
+    True,
+    0,
+)
+
+print(res)
 
 # res1 = krEV(
 #     "밥을 먹는다",
@@ -118,6 +158,8 @@ def krEV(
 #     0,
 # )
 
+# print(res1)
+
 # res2 = krEV(
 #     "밥을 먹는다",
 #     "건강해진다",
@@ -127,6 +169,8 @@ def krEV(
 #     True,
 #     0,
 # )
+
+# print(res2)
 
 # res3 = krEV(
 #     "밥을 먹는다",

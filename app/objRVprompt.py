@@ -14,10 +14,10 @@ al 측정가능성, 그리고 결과 지향성을 모두 개선하여 완성된 
 측정 가능성 개선. 구체적인 수치 목표 설정, 명확한 측정 지표 추가, 시간 제약 명시
 결과 지향성 개선. 활동 중심 문구를 결과 중심으로 변환, 최종 영향이나 가치를 명확히 표현, 달성 기준 구체화
 
-위의 단계별 사고 과정을 거친 후, 종합적으로 판단하여 다음 두 가지 결과를 아래처럼 json형식으로 제시하세요:
+위의 단계별 사고 과정을 거친 후, 종합적으로 판단하여 다음 두 가지 결과를 제시하세요
 
-  "description": "구체적인 수정 이유 (위의 사고 과정을 반영하여 작성)",
-  "revision": 최종 수정 문장
+  1. "description": "구체적인 수정 이유 (위의 사고 과정을 반영하여 작성)",
+  2. "revision": 최종 수정 문장
 
 {prefix_guideline}
 {prefix_example}
@@ -53,8 +53,10 @@ objRV_example_prompt = PromptTemplate(
   "EV_description": {EV_description}
   
   <예시 출력>
+  {
   "revision" : {revision}
   "description" : {description}
+  }
   """,
 )
 
@@ -66,8 +68,10 @@ objRV_suffix = """
 "EV_description": {EV_description}
 
 <실제 출력>
+{
 "description":
 "revision":
+}
 
 출력 형식은 key가 description과 revision 2개인 json 형식입니다. json이라는 문구나 백틱 같은 특수문자는 사용하지 마십시오.
 """

@@ -19,8 +19,9 @@ from langchain.prompts import FewShotPromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-from parse import EV_parse_data, RV_parse_data
 from llm_select import llm
+from parse import EV_parse_data, RV_parse_data
+from selfC import whowins
 
 
 # 기존 3개 함수를 하나로 합치고 objtype 파라미터로 구분하는 함수입니다.
@@ -90,21 +91,52 @@ def objEV(
     )
 
     objEV_res = objEV_chain.run(final_prompt)
+    print(objEV_res)
 
     objEV_res = EV_parse_data(objEV_res)
     return objEV_res
 
 
-# res1 = objEV(
-#     "매일 운동하고 고기를 먹는다.",
-#     "건강해진다",
-#     "출력 양식을 잘 지키십시오",
-#     objEV_align_examples,
-#     True,
-#     True,
-#     0,
-# )
-# print(res1)
+def objEV_selfC(
+    input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+):
+    res1 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    print("res1", res1)
+    description1 = res1["description"]
+    score1 = res1["score"]
+    print("res1", description1, score1)
+
+    res2 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    print("res2", res2)
+    description2 = res2["description"]
+    score2 = res2["score"]
+    print("res2", description2, score2)
+
+    res3 = objEV(
+        input_sentence, upper_objective, guideline, example, isguide, isexample, krtype
+    )
+    print("res3", res3)
+    description3 = res3["description"]
+    score3 = res3["score"]
+    print("res3", description3, score3)
+
+    return whowins(description1, description2, description3, score1, score2, score3)
+
+
+res1 = objEV_selfC(
+    "식량을 많이 준비한다.",
+    "살아남는다.",
+    "출력 양식을 잘 지키십시오",
+    objEV_align_examples,
+    True,
+    True,
+    0,
+)
+print(res1)
 
 
 def objRV(
@@ -161,23 +193,23 @@ def objRV(
     # print(type(final_prompt))
     # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
-    objRV_chain = ConversationChain(llm=llm)
+    # objRV_chain = ConversationChain(llm=llm)
 
-    objRV_res = objRV_chain.run(final_prompt)
-    print(objRV_res)
+    # objRV_res = objRV_chain.run(final_prompt)
+    # print(objRV_res)
 
-    objRV_res = RV_parse_data(objRV_res)
-    return objRV_res
+    # objRV_res = RV_parse_data(objRV_res)
+    # return objRV_res
 
 
-res2 = objRV(
-    "백화점에 간다.",
-    "친구 생일을 준비한다.",
-    "백화점에는 선물이 많이 있습니다.",
-    objRV_examples,
-    "생일에는 보통 선물을 사 주므로 연관성이 있습니다. ",
-    True,
-    True,
-)
+# res2 = objRV(
+#     "백화점에 간다.",
+#     "친구 생일을 준비한다.",
+#     "백화점에는 선물이 많이 있습니다.",
+#     objRV_examples,
+#     "생일에는 보통 선물을 사 주므로 연관성이 있습니다. ",
+#     True,
+#     True,
+# )
 
-print(res2)
+# print(res2)
