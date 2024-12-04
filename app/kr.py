@@ -265,14 +265,14 @@ def krRV(
 # tres = EV_parse_data(erstr)
 # print(tres)
 
-# res2 = krEV(
-#     "LVUP를 켜고 게임을 한다.",
-#     "LVUP 오거나이저 기능 활용의 다변화 시도",
-#     "오거나이저 기능을 활용해보는 상황이 나온다",
-#     krEV_connectivity_examples,
-#     True,
-#     True,
-#     0,
-# )
+res2 = krRV(
+    "LVUP를 켜고 게임을 한다.",
+    "LVUP 오거나이저 기능 활용의 다변화 시도",
+    "오거나이저 기능을 활용해보는 상황이 나온다",
+    krEV_connectivity_examples,
+    True,
+    True,
+    0,
+)
 
-# print(res2)
+print(res2)

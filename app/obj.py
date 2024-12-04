@@ -199,23 +199,23 @@ def objRV(
     # print(type(final_prompt))
     # print("*" * 50, "\n", final_prompt, "\n", "*" * 50)
 
-    # objRV_chain = ConversationChain(llm=llm)
+    objRV_chain = ConversationChain(llm=llm)
 
-    # objRV_res = objRV_chain.run(final_prompt)
+    objRV_res = objRV_chain.run(final_prompt)
     # print(objRV_res)
 
-    # objRV_res = RV_parse_data(objRV_res)
-    # return objRV_res
+    objRV_res = RV_parse_data(objRV_res)
+    return objRV_res
 
 
-# res2 = objRV(
-#     "백화점에 간다.",
-#     "친구 생일을 준비한다.",
-#     "백화점에는 선물이 많이 있습니다.",
-#     objRV_examples,
-#     "생일에는 보통 선물을 사 주므로 연관성이 있습니다. ",
-#     True,
-#     True,
-# )
+res2 = objRV(
+    "백화점에 간다.",
+    "친구 생일을 준비한다.",
+    "백화점에는 선물이 많이 있습니다.",
+    objRV_examples,
+    "생일에는 보통 선물을 사 주므로 연관성이 있습니다. ",
+    True,
+    True,
+)
 
-# print(res2)
+print(res2)
